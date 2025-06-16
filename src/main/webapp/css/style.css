@@ -158,6 +158,65 @@ header p {
     transform: translateY(-1px);
 }
 
+/* フォームヘルプテキスト */
+.form-help {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #718096;
+    font-style: italic;
+}
+
+/* QRコードスタイル */
+.qr-code {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 8px !important;
+    background: white !important;
+    padding: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    flex-shrink: 0 !important;
+    border: 1px solid #e0e0e0 !important;
+    display: block !important;
+    position: relative !important;
+}
+
+.qr-code img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 4px !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: pixelated !important;
+    display: block !important;
+    object-fit: contain !important;
+}
+
+.qr-code.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 4px;
+    min-height: 60px;
+}
+
+.qr-code.error span {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.qr-code.error small {
+    font-size: 0.6rem;
+    word-break: break-all;
+    opacity: 0.8;
+}
+
 /* ボタングループ */
 .button-group {
     display: flex;
@@ -406,6 +465,14 @@ button.danger {
     margin-bottom: 0;
 }
 
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    gap: 15px;
+}
+
 .card-address {
     font-size: 0.9rem;
     color: #718096;
@@ -414,7 +481,7 @@ button.danger {
     margin-top: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    flex-shrink: 0;
+    flex: 1;
 }
 
 /* レスポンシブデザイン */
@@ -454,6 +521,18 @@ button.danger {
     
     .card-address {
         font-size: 0.8rem;
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .qr-code {
+        width: 50px;
+        height: 50px;
+        align-self: flex-end;
     }
     
     .button-group {

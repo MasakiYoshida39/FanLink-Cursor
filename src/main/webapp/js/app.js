@@ -5,9 +5,8 @@ class BusinessCardApp {
         this.bindEvents();
         this.updatePreview();
         
-        // デバッグ用：住所フィールドの確認
-        console.log('住所フィールド:', this.addressInput);
-        console.log('住所フィールドの値:', this.addressInput?.value);
+        // QRGen QRコード生成システムの初期化
+        this.initializeQRGenQRCode();
     }
 
     initializeElements() {
@@ -16,6 +15,8 @@ class BusinessCardApp {
         this.downloadBtn = document.getElementById('downloadBtn');
         this.sampleBtn = document.getElementById('sampleBtn');
         this.clearBtn = document.getElementById('clearBtn');
+        this.testQRBtn = document.getElementById('testQRBtn');
+        this.qrgenQRTestBtn = document.getElementById('qrgenQRTestBtn');
         
         // フォーム要素
         this.nameInput = document.getElementById('name');
@@ -25,6 +26,7 @@ class BusinessCardApp {
         this.emailInput = document.getElementById('email');
         this.addressInput = document.getElementById('address');
         this.websiteInput = document.getElementById('website');
+        this.qrUrlInput = document.getElementById('qrUrl');
         this.templateSelect = document.getElementById('template');
         this.colorSelect = document.getElementById('color');
         
@@ -44,18 +46,64 @@ class BusinessCardApp {
         this.downloadBtn.addEventListener('click', () => this.downloadCard());
         this.sampleBtn.addEventListener('click', () => this.fillSampleData());
         this.clearBtn.addEventListener('click', () => this.clearForm());
+        this.testQRBtn.addEventListener('click', () => this.testQRCode());
+        this.qrgenQRTestBtn.addEventListener('click', () => this.testQRGenQRCode());
+    }
+
+    // QRGen QRコード生成システムの初期化
+    initializeQRGenQRCode() {
+        console.log('QRGen QRコード生成システムを初期化中...');
+        
+        // QRGenライブラリが利用可能かチェック
+        if (typeof qrcode !== 'undefined') {
+            this.qrgenQRCodeAvailable = true;
+            console.log('✅ QRGenライブラリが利用可能です');
+        } else {
+            this.qrgenQRCodeAvailable = false;
+            console.log('⚠️ QRGenライブラリが利用できません、フォールバックを使用します');
+        }
+    }
+
+    // QRGen QRコードテスト
+    testQRGenQRCode() {
+        console.log('QRGen QRコードテスト開始');
+        
+        if (typeof window.testQRGenQRCode === 'function') {
+            window.testQRGenQRCode();
+        } else {
+            console.log('QRGen QRコードテスト関数が利用できません');
+            this.showNotification('QRGen QRコードテスト関数が利用できません', 'error');
+        }
+    }
+
+    // QRコードテスト（QRGen生成使用）
+    testQRCode() {
+        console.log('QRコードテスト開始（QRGen生成使用）');
+        
+        const testUrl = 'https://example.com';
+        this.generateQRCode(testUrl, 200).then(dataURL => {
+            if (dataURL) {
+                console.log('QRコードテスト成功:', dataURL.substring(0, 50) + '...');
+                this.showNotification('QRコードテスト成功！', 'success');
+            } else {
+                console.error('QRコードテスト失敗: 生成できませんでした');
+                this.showNotification('QRコードテスト失敗: 生成できませんでした', 'error');
+            }
+        }).catch(error => {
+            console.error('QRコードテスト失敗:', error);
+            this.showNotification('QRコードテスト失敗: ' + error.message, 'error');
+        });
     }
 
     updatePreview() {
         const cardData = this.getFormData();
-        console.log('カードデータ:', cardData); // デバッグ用
-        const cardHTML = this.generateCardHTML(cardData);
-        this.previewContainer.innerHTML = cardHTML;
+        this.generateCardHTML(cardData).then(cardHTML => {
+            this.previewContainer.innerHTML = cardHTML;
+        });
     }
 
     getFormData() {
         const addressValue = this.addressInput?.value || '〒100-0001 東京都千代田区千代田1-1-1';
-        console.log('住所の値:', addressValue); // デバッグ用
         
         return {
             name: this.nameInput.value || '山田太郎',
@@ -65,14 +113,52 @@ class BusinessCardApp {
             email: this.emailInput.value || 'yamada@sample.com',
             address: addressValue,
             website: this.websiteInput.value || 'www.sample.com',
+            qrUrl: this.qrUrlInput.value || '',
             template: this.templateSelect.value,
             color: this.colorSelect.value
         };
     }
 
-    generateCardHTML(data) {
+    async generateCardHTML(data) {
         const template = data.template;
         const color = data.color;
+        
+        // QRコードを生成
+        let qrCodeHTML = '';
+        if (data.qrUrl && data.qrUrl.trim() !== '') {
+            try {
+                console.log('QRコード生成を試行:', data.qrUrl);
+                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 120);
+                
+                if (qrCodeDataURL) {
+                    qrCodeHTML = `
+                        <div class="qr-code" style="width: 80px; height: 80px; border-radius: 8px; background: white; padding: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative;">
+                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 4px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
+                        </div>
+                    `;
+                    console.log('✅ QRコード生成成功');
+                } else {
+                    console.warn('QRコード生成に失敗しました');
+                    qrCodeHTML = `
+                        <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                            <span>QR生成エラー</span>
+                            <small>${data.qrUrl}</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('QRコード生成エラー:', error);
+                qrCodeHTML = `
+                    <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                        <span>QR生成エラー</span>
+                        <small>${data.qrUrl}</small>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        } else {
+            console.log('QRコード生成をスキップ: URLが空');
+        }
         
         return `
             <div class="business-card ${template} ${color}">
@@ -89,10 +175,62 @@ class BusinessCardApp {
                         <p>🌐 ${this.escapeHtml(data.website)}</p>
                     </div>
                     
-                    <p class="card-address">${this.escapeHtml(data.address)}</p>
+                    <div class="card-footer">
+                        <p class="card-address">${this.escapeHtml(data.address)}</p>
+                        ${qrCodeHTML}
+                    </div>
                 </div>
             </div>
         `;
+    }
+
+    // QRコード生成関数
+    async generateQRCode(text, size = 200) {
+        console.log('QRコード生成開始:', text);
+        
+        if (!text || text.trim() === '') {
+            console.log('QRコード生成をスキップ: テキストが空');
+            return null;
+        }
+        
+        // 1. QRGenライブラリを試行
+        if (typeof window.generateQRGenQRCode === 'function') {
+            try {
+                console.log('QRGenライブラリでQRコード生成を試行');
+                const qrCode = await window.generateQRGenQRCode(text, size);
+                console.log('✅ QRGen QRコード生成成功');
+                return qrCode;
+            } catch (error) {
+                console.warn('QRGen QRコード生成に失敗:', error);
+            }
+        }
+        
+        // 2. QRCode.jsライブラリを試行
+        if (typeof window.generateQRCodeJS === 'function') {
+            try {
+                console.log('QRCode.jsライブラリでQRコード生成を試行');
+                const qrCode = await window.generateQRCodeJS(text, size);
+                console.log('✅ QRCode.js QRコード生成成功');
+                return qrCode;
+            } catch (error) {
+                console.warn('QRCode.js QRコード生成に失敗:', error);
+            }
+        }
+        
+        // 3. シンプルQRコードを試行
+        if (typeof window.generateSimpleQRCode === 'function') {
+            try {
+                console.log('シンプルQRコード生成を試行');
+                const qrCode = await window.generateSimpleQRCode(text, size);
+                console.log('✅ シンプルQRコード生成成功');
+                return qrCode;
+            } catch (error) {
+                console.warn('シンプルQRコード生成に失敗:', error);
+            }
+        }
+        
+        console.error('❌ すべてのQRコード生成方法に失敗');
+        return null;
     }
 
     escapeHtml(text) {
@@ -104,11 +242,8 @@ class BusinessCardApp {
     async downloadCard() {
         try {
             const cardData = this.getFormData();
+            const htmlContent = await this.generateCompleteHTML(cardData);
             
-            // 完全なHTMLファイルを生成
-            const htmlContent = this.generateCompleteHTML(cardData);
-            
-            // Blobを作成してダウンロード
             const blob = new Blob([htmlContent], { type: 'text/html; charset=utf-8' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -126,9 +261,41 @@ class BusinessCardApp {
         }
     }
 
-    generateCompleteHTML(data) {
+    async generateCompleteHTML(data) {
         const template = data.template;
         const color = data.color;
+        
+        // QRコードを生成
+        let qrCodeHTML = '';
+        if (data.qrUrl && data.qrUrl.trim() !== '') {
+            try {
+                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 120);
+                
+                if (qrCodeDataURL) {
+                    qrCodeHTML = `
+                        <div class="qr-code" style="width: 80px; height: 80px; border-radius: 8px; background: white; padding: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative;">
+                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 4px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
+                        </div>
+                    `;
+                } else {
+                    qrCodeHTML = `
+                        <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                            <span>QR生成エラー</span>
+                            <small>${data.qrUrl}</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('QRコード生成エラー:', error);
+                qrCodeHTML = `
+                    <div class="qr-code error">
+                        <span>QR生成エラー</span>
+                        <small>${data.qrUrl}</small>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
         
         return `<!DOCTYPE html>
 <html lang="ja">
@@ -293,6 +460,13 @@ class BusinessCardApp {
             margin-bottom: 0;
         }
         
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+        }
+        
         .card-address {
             font-size: 0.9rem;
             color: #777;
@@ -301,12 +475,58 @@ class BusinessCardApp {
             margin-top: 0;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            flex-shrink: 0;
+            flex: 1;
+            margin-right: 15px;
         }
         
         .business-card.modern .card-address,
         .business-card.creative .card-address {
             color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: white;
+            padding: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+        
+        .qr-code.error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 4px;
+            min-height: 60px;
+        }
+        
+        .qr-code.error span {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .qr-code.error small {
+            font-size: 0.6rem;
+            word-break: break-all;
+            opacity: 0.8;
         }
         
         @media print {
@@ -336,7 +556,10 @@ class BusinessCardApp {
                 <p>🌐 ${this.escapeHtml(data.website)}</p>
             </div>
             
-            <p class="card-address">${this.escapeHtml(data.address)}</p>
+            <div class="card-footer">
+                <p class="card-address">${this.escapeHtml(data.address)}</p>
+                ${qrCodeHTML}
+            </div>
         </div>
     </div>
     
@@ -351,11 +574,6 @@ class BusinessCardApp {
 </html>`;
     }
 
-    downloadAsImage() {
-        // このメソッドは不要になったので削除
-        this.showNotification('HTMLファイルとしてダウンロードされました。', 'info');
-    }
-
     // サンプルデータでフォームを埋める
     fillSampleData() {
         this.nameInput.value = '田中花子';
@@ -365,6 +583,7 @@ class BusinessCardApp {
         this.emailInput.value = 'tanaka@tech.co.jp';
         this.addressInput.value = '〒150-0043 東京都渋谷区道玄坂1-1-1';
         this.websiteInput.value = 'www.tech.co.jp';
+        this.qrUrlInput.value = 'https://www.tech.co.jp';
         this.templateSelect.value = 'modern';
         this.colorSelect.value = 'purple';
         this.updatePreview();
@@ -403,10 +622,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // グローバルにアクセス可能にする
     window.businessCardApp = app;
     
-    // デバッグ用：コンソールからアクセス可能
-    console.log('名刺作成アプリが起動しました。');
-    console.log('window.businessCardApp.fillSampleData() でサンプルデータを入力できます。');
-    console.log('window.businessCardApp.clearForm() でフォームをクリアできます。');
+    console.log('FanLinkアプリが起動しました（QRGen QRコード生成使用）。');
+    console.log('QRGen QRテスト: 「QRGen QRテスト」ボタンをクリックしてください。');
 });
 
 // キーボードショートカット
