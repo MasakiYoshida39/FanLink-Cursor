@@ -10,7 +10,7 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
     
-    <name>名刺作成アプリ</name>
+    <name>FanLink</name>
     <description>プロフェッショナルな名刺を簡単に作成できるWebアプリケーション</description>
     
     <properties>
