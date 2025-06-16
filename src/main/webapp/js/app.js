@@ -132,15 +132,15 @@ class BusinessCardApp {
                 
                 if (qrCodeDataURL) {
                     qrCodeHTML = `
-                        <div class="qr-code" style="width: 80px; height: 80px; border-radius: 8px; background: white; padding: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative;">
-                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 4px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
+                        <div class="qr-code" style="width: 60px; height: 60px; border-radius: 6px; background: white; padding: 4px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative; margin-left: 10px;">
+                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 3px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
                         </div>
                     `;
                     console.log('✅ QRコード生成成功');
                 } else {
                     console.warn('QRコード生成に失敗しました');
                     qrCodeHTML = `
-                        <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                        <div class="qr-code error" style="width: 60px; height: 60px; border-radius: 6px; background: #fee; padding: 4px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.6rem; text-align: center; margin-left: 10px;">
                             <span>QR生成エラー</span>
                             <small>${data.qrUrl}</small>
                         </div>
@@ -149,7 +149,7 @@ class BusinessCardApp {
             } catch (error) {
                 console.error('QRコード生成エラー:', error);
                 qrCodeHTML = `
-                    <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                    <div class="qr-code error" style="width: 60px; height: 60px; border-radius: 6px; background: #fee; padding: 4px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.6rem; text-align: center; margin-left: 10px;">
                         <span>QR生成エラー</span>
                         <small>${data.qrUrl}</small>
                         <small>${error.message}</small>
@@ -273,13 +273,13 @@ class BusinessCardApp {
                 
                 if (qrCodeDataURL) {
                     qrCodeHTML = `
-                        <div class="qr-code" style="width: 80px; height: 80px; border-radius: 8px; background: white; padding: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative;">
-                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 4px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
+                        <div class="qr-code" style="width: 60px; height: 60px; border-radius: 6px; background: white; padding: 4px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); flex-shrink: 0; border: 1px solid #e0e0e0; display: block; position: relative; margin-left: 10px;">
+                            <img src="${qrCodeDataURL}" alt="QR Code" title="QR Code for ${data.qrUrl}" style="width: 100%; height: 100%; border-radius: 3px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; image-rendering: pixelated; display: block; object-fit: contain;">
                         </div>
                     `;
                 } else {
                     qrCodeHTML = `
-                        <div class="qr-code error" style="width: 80px; height: 80px; border-radius: 8px; background: #fee; padding: 6px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.7rem; text-align: center;">
+                        <div class="qr-code error" style="width: 60px; height: 60px; border-radius: 6px; background: #fee; padding: 4px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.6rem; text-align: center; margin-left: 10px;">
                             <span>QR生成エラー</span>
                             <small>${data.qrUrl}</small>
                         </div>
@@ -321,13 +321,13 @@ class BusinessCardApp {
         }
         
         .business-card {
-            width: 450px;
-            height: 280px;
+            width: 400px;
+            height: 250px;
             border-radius: 15px;
-            padding: 35px;
+            padding: 25px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
@@ -388,7 +388,7 @@ class BusinessCardApp {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 12px;
+            gap: 4px;
             position: relative;
             z-index: 1;
         }
@@ -398,9 +398,9 @@ class BusinessCardApp {
         }
         
         .card-name {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -417,9 +417,9 @@ class BusinessCardApp {
         }
         
         .card-company {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             color: #495057;
             line-height: 1.2;
         }
@@ -430,7 +430,7 @@ class BusinessCardApp {
         }
         
         .card-position {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #6c757d;
             margin-bottom: 0;
             font-weight: 500;
@@ -447,12 +447,12 @@ class BusinessCardApp {
         }
         
         .card-contact p {
-            font-size: 1rem;
-            margin-bottom: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
             color: #495057;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             line-height: 1.3;
         }
         
@@ -460,23 +460,30 @@ class BusinessCardApp {
             margin-bottom: 0;
         }
         
+        .business-card.modern .card-contact p,
+        .business-card.creative .card-contact p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
         .card-footer {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: auto;
+            margin-top: 4px;
+            gap: 10px;
+            padding-top: 4px;
         }
         
         .card-address {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #777;
-            line-height: 1.4;
+            line-height: 1.3;
             font-weight: 500;
             margin-top: 0;
             word-wrap: break-word;
             overflow-wrap: break-word;
             flex: 1;
-            margin-right: 15px;
+            margin-right: 0;
         }
         
         .business-card.modern .card-address,
@@ -485,12 +492,12 @@ class BusinessCardApp {
         }
         
         .qr-code {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
             background: white;
-            padding: 6px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            padding: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
             border: 1px solid #e0e0e0;
         }
@@ -498,7 +505,7 @@ class BusinessCardApp {
         .qr-code img {
             width: 100%;
             height: 100%;
-            border-radius: 4px;
+            border-radius: 3px;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
             image-rendering: pixelated;
@@ -512,7 +519,7 @@ class BusinessCardApp {
             background: #fee;
             border: 1px solid #fcc;
             color: #c33;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             text-align: center;
             padding: 4px;
             min-height: 60px;

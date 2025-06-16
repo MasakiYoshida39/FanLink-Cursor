@@ -169,22 +169,23 @@ header p {
 
 /* QRコードスタイル */
 .qr-code {
-    width: 80px !important;
-    height: 80px !important;
-    border-radius: 8px !important;
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 6px !important;
     background: white !important;
-    padding: 6px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    padding: 4px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
     flex-shrink: 0 !important;
     border: 1px solid #e0e0e0 !important;
     display: block !important;
     position: relative !important;
+    margin-left: 10px !important;
 }
 
 .qr-code img {
     width: 100% !important;
     height: 100% !important;
-    border-radius: 4px !important;
+    border-radius: 3px !important;
     image-rendering: -webkit-optimize-contrast !important;
     image-rendering: crisp-edges !important;
     image-rendering: pixelated !important;
@@ -193,17 +194,17 @@ header p {
 }
 
 .qr-code.error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #fee;
-    border: 1px solid #fcc;
-    color: #c33;
-    font-size: 0.7rem;
-    text-align: center;
-    padding: 4px;
-    min-height: 60px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #fee !important;
+    border: 1px solid #fcc !important;
+    color: #c33 !important;
+    font-size: 0.6rem !important;
+    text-align: center !important;
+    padding: 4px !important;
+    min-height: 60px !important;
 }
 
 .qr-code.error span {
@@ -333,88 +334,32 @@ button.danger {
 
 /* 名刺スタイル */
 .business-card {
-    width: 450px;
-    height: 280px;
+    width: 400px;
+    height: 250px;
     border-radius: 15px;
-    padding: 35px;
+    padding: 25px;
     position: relative;
-    box-shadow: 
-        0 20px 40px rgba(0,0,0,0.15),
-        0 0 0 1px rgba(255,255,255,0.1);
-    transition: all 0.4s ease;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    margin: 0 auto;
 }
 
 .business-card:hover {
-    transform: scale(1.05) rotateY(5deg);
-    box-shadow: 
-        0 30px 60px rgba(0,0,0,0.2),
-        0 0 0 1px rgba(255,255,255,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
-/* テンプレート別スタイル */
-.business-card.classic {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 2px solid #e2e8f0;
-}
-
-.business-card.modern {
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 50%, #e2e8f0 100%);
-}
-
-.business-card.minimal {
-    background: linear-gradient(135deg, #fafbfc 0%, #f1f5f9 100%);
-    border: 1px solid #e2e8f0;
-}
-
-.business-card.creative {
-    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-}
-
-/* カラーテーマ */
-.business-card.blue {
-    border-left: 6px solid #667eea;
-    box-shadow: 
-        0 20px 40px rgba(102, 126, 234, 0.2),
-        0 0 0 1px rgba(255,255,255,0.1);
-}
-
-.business-card.green {
-    border-left: 6px solid #48bb78;
-    box-shadow: 
-        0 20px 40px rgba(72, 187, 120, 0.2),
-        0 0 0 1px rgba(255,255,255,0.1);
-}
-
-.business-card.red {
-    border-left: 6px solid #f56565;
-    box-shadow: 
-        0 20px 40px rgba(245, 101, 101, 0.2),
-        0 0 0 1px rgba(255,255,255,0.1);
-}
-
-.business-card.purple {
-    border-left: 6px solid #9f7aea;
-    box-shadow: 
-        0 20px 40px rgba(159, 122, 234, 0.2),
-        0 0 0 1px rgba(255,255,255,0.1);
-}
-
-.business-card.orange {
-    border-left: 6px solid #ed8936;
-    box-shadow: 
-        0 20px 40px rgba(237, 137, 54, 0.2),
-        0 0 0 1px rgba(255,255,255,0.1);
-}
-
-/* 名刺コンテンツ */
 .card-content {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 12px;
+    gap: 4px;
+    position: relative;
+    z-index: 1;
 }
 
 .card-header {
@@ -422,25 +367,27 @@ button.danger {
 }
 
 .card-name {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #2d3748;
-    margin-bottom: 8px;
-    letter-spacing: -0.5px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1.2;
 }
 
 .card-company {
-    font-size: 1.3rem;
-    color: #4a5568;
-    margin-bottom: 6px;
+    font-size: 1.1rem;
     font-weight: 600;
+    margin-bottom: 4px;
+    color: #495057;
     line-height: 1.2;
 }
 
 .card-position {
-    font-size: 1.1rem;
-    color: #718096;
+    font-size: 1rem;
+    color: #6c757d;
     margin-bottom: 0;
     font-weight: 500;
     line-height: 1.2;
@@ -451,13 +398,12 @@ button.danger {
 }
 
 .card-contact p {
-    font-size: 1rem;
-    color: #4a5568;
-    margin-bottom: 4px;
-    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+    color: #495057;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     line-height: 1.3;
 }
 
@@ -469,19 +415,21 @@ button.danger {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: auto;
-    gap: 15px;
+    margin-top: 4px;
+    gap: 10px;
+    padding-top: 4px;
 }
 
 .card-address {
-    font-size: 0.9rem;
-    color: #718096;
-    line-height: 1.4;
-    font-weight: 400;
+    font-size: 0.8rem;
+    color: #777;
+    line-height: 1.3;
+    font-weight: 500;
     margin-top: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
     flex: 1;
+    margin-right: 0;
 }
 
 /* レスポンシブデザイン */
@@ -605,4 +553,77 @@ button.danger {
 
 .notification.info {
     background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
+
+/* テンプレート別スタイル */
+.business-card.classic {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+}
+
+.business-card.modern {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 50%, #e2e8f0 100%);
+}
+
+.business-card.minimal {
+    background: linear-gradient(135deg, #fafbfc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+}
+
+.business-card.creative {
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+/* カラーテーマ */
+.business-card.blue {
+    border-left: 4px solid #667eea;
+    box-shadow: 0 15px 30px rgba(102, 126, 234, 0.15);
+}
+
+.business-card.green {
+    border-left: 4px solid #48bb78;
+    box-shadow: 0 15px 30px rgba(72, 187, 120, 0.15);
+}
+
+.business-card.red {
+    border-left: 4px solid #f56565;
+    box-shadow: 0 15px 30px rgba(245, 101, 101, 0.15);
+}
+
+.business-card.purple {
+    border-left: 4px solid #9f7aea;
+    box-shadow: 0 15px 30px rgba(159, 122, 234, 0.15);
+}
+
+.business-card.orange {
+    border-left: 4px solid #ed8936;
+    box-shadow: 0 15px 30px rgba(237, 137, 54, 0.15);
+}
+
+.business-card.modern .card-name,
+.business-card.creative .card-name {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.business-card.modern .card-company,
+.business-card.creative .card-company {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.business-card.modern .card-position,
+.business-card.creative .card-position {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.business-card.modern .card-contact p,
+.business-card.creative .card-contact p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.business-card.modern .card-address,
+.business-card.creative .card-address {
+    color: rgba(255, 255, 255, 0.8);
 }
