@@ -95,7 +95,7 @@ class BusinessCardApp {
         if (data.qrUrl && data.qrUrl.trim() !== '') {
             try {
                 console.log('QRコード生成を試行:', data.qrUrl);
-                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 120);
+                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 60);
                 
                 if (qrCodeDataURL) {
                     qrCodeHTML = `
@@ -143,8 +143,12 @@ class BusinessCardApp {
                     </div>
                     
                     <div class="card-footer">
-                        <p class="card-address">${this.escapeHtml(data.address)}</p>
-                        ${qrCodeHTML}
+                        <div class="footer-left">
+                            <p class="card-address">${this.escapeHtml(data.address)}</p>
+                        </div>
+                        <div class="footer-right">
+                            ${qrCodeHTML}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -236,7 +240,7 @@ class BusinessCardApp {
         let qrCodeHTML = '';
         if (data.qrUrl && data.qrUrl.trim() !== '') {
             try {
-                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 120);
+                const qrCodeDataURL = await this.generateQRCode(data.qrUrl, 60);
                 
                 if (qrCodeDataURL) {
                     qrCodeHTML = `
@@ -255,7 +259,7 @@ class BusinessCardApp {
             } catch (error) {
                 console.error('QRコード生成エラー:', error);
                 qrCodeHTML = `
-                    <div class="qr-code error">
+                    <div class="qr-code error" style="width: 60px; height: 60px; border-radius: 6px; background: #fee; padding: 4px; border: 1px solid #fcc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #c33; font-size: 0.6rem; text-align: center; margin-left: 10px;">
                         <span>QR生成エラー</span>
                         <small>${data.qrUrl}</small>
                         <small>${error.message}</small>
@@ -440,17 +444,22 @@ class BusinessCardApp {
             gap: 10px;
             padding-top: 4px;
         }
-        
+        .footer-left {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+        .footer-right {
+            display: flex;
+            align-items: flex-end;
+        }
         .card-address {
             font-size: 0.8rem;
             color: #777;
             line-height: 1.3;
             font-weight: 500;
-            margin-top: 0;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            flex: 1;
-            margin-right: 0;
+            margin: 0;
+            word-break: break-word;
+            white-space: normal;
         }
         
         .business-card.modern .card-address,
@@ -531,8 +540,12 @@ class BusinessCardApp {
             </div>
             
             <div class="card-footer">
-                <p class="card-address">${this.escapeHtml(data.address)}</p>
-                ${qrCodeHTML}
+                <div class="footer-left">
+                    <p class="card-address">${this.escapeHtml(data.address)}</p>
+                </div>
+                <div class="footer-right">
+                    ${qrCodeHTML}
+                </div>
             </div>
         </div>
     </div>
