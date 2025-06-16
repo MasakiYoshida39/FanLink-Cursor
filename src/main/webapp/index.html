@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名刺作成アプリ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>名刺作成アプリ</h1>
+            <p>プロフェッショナルな名刺を簡単に作成</p>
+        </header>
+        
+        <main>
+            <div class="card-creator">
+                <div class="form-section">
+                    <h2>名刺情報入力</h2>
+                    <form id="businessCardForm">
+                        <div class="form-group">
+                            <label for="name">氏名 *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="company">会社名</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="position">役職</label>
+                            <input type="text" id="position" name="position">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">電話番号</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">メールアドレス</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">住所</label>
+                            <textarea id="address" name="address" rows="3" placeholder="〒100-0001 東京都千代田区千代田1-1-1"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="website">Webサイト</label>
+                            <input type="url" id="website" name="website">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="template">テンプレート</label>
+                            <select id="template" name="template">
+                                <option value="classic">クラシック</option>
+                                <option value="modern">モダン</option>
+                                <option value="minimal">ミニマル</option>
+                                <option value="creative">クリエイティブ</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="color">カラーテーマ</label>
+                            <select id="color" name="color">
+                                <option value="blue">ブルー</option>
+                                <option value="green">グリーン</option>
+                                <option value="red">レッド</option>
+                                <option value="purple">パープル</option>
+                                <option value="orange">オレンジ</option>
+                            </select>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button type="button" id="downloadBtn" class="primary">ダウンロード</button>
+                            <button type="button" id="sampleBtn" class="secondary">サンプルデータ</button>
+                            <button type="button" id="clearBtn" class="danger">クリア</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="preview-section">
+                    <h2>プレビュー</h2>
+                    <p class="preview-note">※ 入力内容はリアルタイムで反映されます</p>
+                    <div id="cardPreview" class="card-preview">
+                        <div class="business-card classic blue">
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <h3 class="card-name">山田太郎</h3>
+                                    <p class="card-company">株式会社サンプル</p>
+                                    <p class="card-position">営業部長</p>
+                                </div>
+                                <div class="card-contact">
+                                    <p>📞 03-1234-5678</p>
+                                    <p>📧 yamada@sample.com</p>
+                                    <p>🌐 www.sample.com</p>
+                                </div>
+                                <p class="card-address">〒100-0001 東京都千代田区千代田1-1-1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html> 

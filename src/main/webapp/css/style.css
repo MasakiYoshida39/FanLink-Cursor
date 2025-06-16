@@ -1,0 +1,529 @@
+/* 全体のスタイル */
+/* 全体のスタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+    z-index: -1;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ヘッダー */
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+    border-radius: 2px;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+header p {
+    font-size: 1.3rem;
+    opacity: 0.95;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+/* メインコンテンツ */
+.card-creator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 50px;
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-creator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+}
+
+/* フォームセクション */
+.form-section h2 {
+    color: #2d3748;
+    margin-bottom: 35px;
+    font-size: 2rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.form-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 15px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-1px);
+}
+
+/* ボタングループ */
+.button-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 140px;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.3px;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+button:active {
+    transform: translateY(-1px);
+}
+
+button.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+button.secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+}
+
+button.danger {
+    background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+}
+
+/* プレビューセクション */
+.preview-section h2 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.preview-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+.preview-note {
+    color: #718096;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    font-style: italic;
+    padding: 10px 15px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+}
+
+.card-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 350px;
+    position: relative;
+}
+
+.card-preview::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* 名刺スタイル */
+.business-card {
+    width: 450px;
+    height: 280px;
+    border-radius: 15px;
+    padding: 35px;
+    position: relative;
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(255,255,255,0.1);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.business-card:hover {
+    transform: scale(1.05) rotateY(5deg);
+    box-shadow: 
+        0 30px 60px rgba(0,0,0,0.2),
+        0 0 0 1px rgba(255,255,255,0.3);
+}
+
+/* テンプレート別スタイル */
+.business-card.classic {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+}
+
+.business-card.modern {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 50%, #e2e8f0 100%);
+}
+
+.business-card.minimal {
+    background: linear-gradient(135deg, #fafbfc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+}
+
+.business-card.creative {
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+/* カラーテーマ */
+.business-card.blue {
+    border-left: 6px solid #667eea;
+    box-shadow: 
+        0 20px 40px rgba(102, 126, 234, 0.2),
+        0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.business-card.green {
+    border-left: 6px solid #48bb78;
+    box-shadow: 
+        0 20px 40px rgba(72, 187, 120, 0.2),
+        0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.business-card.red {
+    border-left: 6px solid #f56565;
+    box-shadow: 
+        0 20px 40px rgba(245, 101, 101, 0.2),
+        0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.business-card.purple {
+    border-left: 6px solid #9f7aea;
+    box-shadow: 
+        0 20px 40px rgba(159, 122, 234, 0.2),
+        0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.business-card.orange {
+    border-left: 6px solid #ed8936;
+    box-shadow: 
+        0 20px 40px rgba(237, 137, 54, 0.2),
+        0 0 0 1px rgba(255,255,255,0.1);
+}
+
+/* 名刺コンテンツ */
+.card-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.card-header {
+    margin-bottom: 0;
+}
+
+.card-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2d3748;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.card-company {
+    font-size: 1.3rem;
+    color: #4a5568;
+    margin-bottom: 6px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.card-position {
+    font-size: 1.1rem;
+    color: #718096;
+    margin-bottom: 0;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.card-contact {
+    margin-bottom: 0;
+}
+
+.card-contact p {
+    font-size: 1rem;
+    color: #4a5568;
+    margin-bottom: 4px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.3;
+}
+
+.card-contact p:last-child {
+    margin-bottom: 0;
+}
+
+.card-address {
+    font-size: 0.9rem;
+    color: #718096;
+    line-height: 1.4;
+    font-weight: 400;
+    margin-top: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-shrink: 0;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .card-creator {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 30px;
+        border-radius: 20px;
+    }
+    
+    header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .business-card {
+        width: 350px;
+        height: 220px;
+        padding: 25px;
+    }
+    
+    .card-name {
+        font-size: 1.7rem;
+    }
+    
+    .card-company {
+        font-size: 1.1rem;
+    }
+    
+    .card-position {
+        font-size: 1rem;
+    }
+    
+    .card-contact p {
+        font-size: 0.9rem;
+    }
+    
+    .card-address {
+        font-size: 0.8rem;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    button {
+        flex: none;
+        width: 100%;
+    }
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.card-preview {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.business-card {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* 通知スタイル */
+.notification {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    padding: 18px 25px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.notification.error {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+.notification.info {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
