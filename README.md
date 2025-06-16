@@ -1,4 +1,4 @@
-# 名刺作成アプリ
+# FanLink
 
 プロフェッショナルな名刺を簡単に作成できるWebアプリケーションです。
 
@@ -32,7 +32,7 @@
 1. プロジェクトをクローンまたはダウンロード
 ```bash
 git clone <repository-url>
-cd business-card-app
+cd FanLink
 ```
 
 2. Mavenでプロジェクトをビルド
@@ -101,7 +101,7 @@ mvn tomcat7:run
 ## ファイル構成
 
 ```
-business-card-app/
+FanLink/
 ├── src/
 │   └── main/
 │       ├── java/
