@@ -6,6 +6,7 @@
     <title>FanLink</title>
     <link rel="stylesheet" href="css/style.css?v=2.0">
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
         // QRGenライブラリを使用したQRコード生成
         window.generateQRGenQRCode = function(text, size = 200) {
@@ -140,7 +141,7 @@
                             <rect x="${size-24}" y="16" width="8" height="8" fill="black"/>
                             <rect x="10" y="${size-30}" width="20" height="20" fill="white"/>
                             <rect x="12" y="${size-28}" width="16" height="16" fill="black"/>
-                            <rect x="14" y="${size-26}" width="12" height="12" fill="white"/>
+                            <rect x="14" y="14" width="12" height="12" fill="white"/>
                             <rect x="16" y="${size-24}" width="8" height="8" fill="black"/>
                             <text x="${size/2}" y="${size-10}" text-anchor="middle" font-family="Arial" font-size="10" fill="black">
                                 ${validUrl.substring(0, 15)}${validUrl.length > 15 ? '...' : ''}
@@ -343,7 +344,9 @@
                         </div>
                         
                         <div class="button-group">
-                            <button type="button" id="downloadBtn" class="primary">ダウンロード</button>
+                            <button type="button" id="downloadBtn" class="primary">名刺HTMLダウンロード</button>
+                            <button type="button" id="downloadBg1920Btn" class="secondary">Zoom背景用画像(1920×1080)ダウンロード</button>
+                            <button type="button" id="downloadBg1254Btn" class="secondary">名刺ダウンロード(1254×758)ダウンロード</button>
                             <button type="button" id="sampleBtn" class="secondary">サンプルデータ</button>
                             <button type="button" id="clearBtn" class="danger">クリア</button>
                         </div>

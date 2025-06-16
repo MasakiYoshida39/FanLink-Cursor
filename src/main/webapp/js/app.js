@@ -17,6 +17,8 @@ class BusinessCardApp {
         this.clearBtn = document.getElementById('clearBtn');
         this.testQRBtn = document.getElementById('testQRBtn');
         this.qrgenQRTestBtn = document.getElementById('qrgenQRTestBtn');
+        this.downloadBg1920Btn = document.getElementById('downloadBg1920Btn');
+        this.downloadBg1254Btn = document.getElementById('downloadBg1254Btn');
         
         // フォーム要素
         this.nameInput = document.getElementById('name');
@@ -46,6 +48,8 @@ class BusinessCardApp {
         this.downloadBtn.addEventListener('click', () => this.downloadCard());
         this.sampleBtn.addEventListener('click', () => this.fillSampleData());
         this.clearBtn.addEventListener('click', () => this.clearForm());
+        this.downloadBg1920Btn.addEventListener('click', () => this.downloadCardImage(1920, 1080));
+        this.downloadBg1254Btn.addEventListener('click', () => this.downloadCardImage(1254, 758));
     }
 
     // QRGen QRコード生成システムの初期化
@@ -599,6 +603,33 @@ class BusinessCardApp {
             notification.classList.remove('show');
             setTimeout(() => document.body.removeChild(notification), 300);
         }, 3000);
+    }
+
+    async downloadCardImage(width, height) {
+        const card = this.previewContainer.querySelector('.business-card');
+        if (!card) {
+            this.showNotification('名刺が見つかりません', 'error');
+            return;
+        }
+        // 一時的に拡大用のラッパーを作成
+        const wrapper = document.createElement('div');
+        wrapper.style.width = width + 'px';
+        wrapper.style.height = height + 'px';
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.justifyContent = 'center';
+        wrapper.style.background = '#fff';
+        wrapper.appendChild(card.cloneNode(true));
+        document.body.appendChild(wrapper);
+        // 画像化
+        await html2canvas(wrapper, {width, height, backgroundColor: '#fff', scale: 1}).then(canvas => {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = `business-card-bg-${width}x${height}.png`;
+            link.click();
+        });
+        document.body.removeChild(wrapper);
+        this.showNotification(`${width}x${height}画像をダウンロードしました`, 'success');
     }
 }
 
