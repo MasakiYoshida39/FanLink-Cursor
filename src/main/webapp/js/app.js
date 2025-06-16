@@ -46,8 +46,6 @@ class BusinessCardApp {
         this.downloadBtn.addEventListener('click', () => this.downloadCard());
         this.sampleBtn.addEventListener('click', () => this.fillSampleData());
         this.clearBtn.addEventListener('click', () => this.clearForm());
-        this.testQRBtn.addEventListener('click', () => this.testQRCode());
-        this.qrgenQRTestBtn.addEventListener('click', () => this.testQRGenQRCode());
     }
 
     // QRGen QRコード生成システムの初期化
@@ -62,37 +60,6 @@ class BusinessCardApp {
             this.qrgenQRCodeAvailable = false;
             console.log('⚠️ QRGenライブラリが利用できません、フォールバックを使用します');
         }
-    }
-
-    // QRGen QRコードテスト
-    testQRGenQRCode() {
-        console.log('QRGen QRコードテスト開始');
-        
-        if (typeof window.testQRGenQRCode === 'function') {
-            window.testQRGenQRCode();
-        } else {
-            console.log('QRGen QRコードテスト関数が利用できません');
-            this.showNotification('QRGen QRコードテスト関数が利用できません', 'error');
-        }
-    }
-
-    // QRコードテスト（QRGen生成使用）
-    testQRCode() {
-        console.log('QRコードテスト開始（QRGen生成使用）');
-        
-        const testUrl = 'https://example.com';
-        this.generateQRCode(testUrl, 200).then(dataURL => {
-            if (dataURL) {
-                console.log('QRコードテスト成功:', dataURL.substring(0, 50) + '...');
-                this.showNotification('QRコードテスト成功！', 'success');
-            } else {
-                console.error('QRコードテスト失敗: 生成できませんでした');
-                this.showNotification('QRコードテスト失敗: 生成できませんでした', 'error');
-            }
-        }).catch(error => {
-            console.error('QRコードテスト失敗:', error);
-            this.showNotification('QRコードテスト失敗: ' + error.message, 'error');
-        });
     }
 
     updatePreview() {
