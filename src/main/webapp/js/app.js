@@ -1,6 +1,7 @@
 // 名刺作成アプリケーション
 class BusinessCardApp {
     constructor() {
+        this.photoDataUrl = '';
         this.initializeElements();
         this.bindEvents();
         this.updatePreview();
@@ -31,6 +32,7 @@ class BusinessCardApp {
         this.qrUrlInput = document.getElementById('qrUrl');
         this.templateSelect = document.getElementById('template');
         this.colorSelect = document.getElementById('color');
+        this.photoInput = document.getElementById('photo');
         
         // 住所フィールドにデフォルト値を設定
         if (this.addressInput && !this.addressInput.value) {
@@ -50,6 +52,23 @@ class BusinessCardApp {
         this.clearBtn.addEventListener('click', () => this.clearForm());
         this.downloadBg1920Btn.addEventListener('click', () => this.downloadCardImage(1920, 1080));
         this.downloadBg1254Btn.addEventListener('click', () => this.downloadCardImage(1254, 758));
+        
+        if (this.photoInput) {
+            this.photoInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.photoDataUrl = e.target.result;
+                        this.updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    this.photoDataUrl = '';
+                    this.updatePreview();
+                }
+            });
+        }
     }
 
     // QRGen QRコード生成システムの初期化
@@ -86,7 +105,8 @@ class BusinessCardApp {
             website: this.websiteInput.value || 'www.sample.com',
             qrUrl: this.qrUrlInput.value || '',
             template: this.templateSelect.value,
-            color: this.colorSelect.value
+            color: this.colorSelect.value,
+            photo: this.photoDataUrl
         };
     }
 
@@ -131,21 +151,26 @@ class BusinessCardApp {
             console.log('QRコード生成をスキップ: URLが空');
         }
         
+        // 画像タグ生成
+        let photoHTML = '';
+        if (data.photo) {
+            photoHTML = `<img src="${data.photo}" alt="写真" style="width:48px; height:48px; object-fit:cover; border-radius:50%; margin-left:12px; display:block;">`;
+        }
+        
         return `
             <div class="business-card ${template} ${color}">
                 <div class="card-content">
-                    <div class="card-header">
-                        <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
-                        <p class="card-company">${this.escapeHtml(data.company)}</p>
-                        <p class="card-position">${this.escapeHtml(data.position)}</p>
+                    <div class="card-header" style="display:flex; align-items:center; gap:8px;">
+                        <h3 class="card-name" style="margin-bottom:0;">${this.escapeHtml(data.name)}</h3>
+                        ${photoHTML}
                     </div>
-                    
+                    <p class="card-company">${this.escapeHtml(data.company)}</p>
+                    <p class="card-position">${this.escapeHtml(data.position)}</p>
                     <div class="card-contact">
                         <p>📞 ${this.escapeHtml(data.phone)}</p>
                         <p>📧 ${this.escapeHtml(data.email)}</p>
                         <p>🌐 ${this.escapeHtml(data.website)}</p>
                     </div>
-                    
                     <div class="card-footer">
                         <div class="footer-left">
                             <p class="card-address">${this.escapeHtml(data.address)}</p>
@@ -531,18 +556,17 @@ class BusinessCardApp {
 <body>
     <div class="business-card ${template} ${color}">
         <div class="card-content">
-            <div class="card-header">
-                <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
-                <p class="card-company">${this.escapeHtml(data.company)}</p>
-                <p class="card-position">${this.escapeHtml(data.position)}</p>
+            <div class="card-header" style="display:flex; align-items:center; gap:8px;">
+                <h3 class="card-name" style="margin-bottom:0;">${this.escapeHtml(data.name)}</h3>
+                ${photoHTML}
             </div>
-            
+            <p class="card-company">${this.escapeHtml(data.company)}</p>
+            <p class="card-position">${this.escapeHtml(data.position)}</p>
             <div class="card-contact">
                 <p>📞 ${this.escapeHtml(data.phone)}</p>
                 <p>📧 ${this.escapeHtml(data.email)}</p>
                 <p>🌐 ${this.escapeHtml(data.website)}</p>
             </div>
-            
             <div class="card-footer">
                 <div class="footer-left">
                     <p class="card-address">${this.escapeHtml(data.address)}</p>

@@ -9,6 +9,8 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.util.Base64;
 
 @jakarta.servlet.annotation.WebServlet("/api/generate-pdf")
 @MultipartConfig
@@ -32,6 +34,19 @@ public class BusinessCardServlet extends HttpServlet {
             // リクエストボディを読み取り
             String requestBody = request.getReader().lines().collect(Collectors.joining());
             
+            // 画像ファイル取得
+            Part photoPart = null;
+            String photoBase64 = "";
+            try {
+                photoPart = request.getPart("photo");
+            } catch (Exception e) {
+                // JSONリクエストの場合はPartが無いこともあるので無視
+            }
+            if (photoPart != null && photoPart.getSize() > 0) {
+                byte[] photoBytes = photoPart.getInputStream().readAllBytes();
+                photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+            }
+            
             // シンプルなJSONパース（実際のプロダクションでは適切なJSONライブラリを使用）
             String name = extractJsonValue(requestBody, "name", "山田太郎");
             String company = extractJsonValue(requestBody, "company", "株式会社サンプル");
@@ -44,7 +59,7 @@ public class BusinessCardServlet extends HttpServlet {
             String color = extractJsonValue(requestBody, "color", "blue");
             
             // HTMLコンテンツを生成
-            String htmlContent = generateHTMLContent(name, company, position, phone, email, address, website, template, color);
+            String htmlContent = generateHTMLContent(name, company, position, phone, email, address, website, template, color, photoBase64);
             
             // HTMLファイルとしてダウンロード
             response.setContentType("text/html; charset=UTF-8");
@@ -79,7 +94,8 @@ public class BusinessCardServlet extends HttpServlet {
     
     private String generateHTMLContent(String name, String company, String position, 
                                      String phone, String email, String address, 
-                                     String website, String template, String color) {
+                                     String website, String template, String color,
+                                     String photoBase64) {
         
         StringBuilder html = new StringBuilder();
         html.append("<!DOCTYPE html>\n");
@@ -112,8 +128,17 @@ public class BusinessCardServlet extends HttpServlet {
         html.append("<body>\n");
         html.append("    <div class=\"business-card ").append(template).append(" ").append(color).append("\">\n");
         html.append("        <div class=\"card-content\">\n");
-        html.append("            <div class=\"card-header\">\n");
-        html.append("                <h3 class=\"card-name\">").append(escapeHtml(name)).append("</h3>\n");
+        html.append("            <div class=\"card-header\" style=\"display:flex; align-items:center; gap:8px;\">\n");
+        if (photoBase64 != null && !photoBase64.isEmpty()) {
+            html.append("                <h3 class=\"card-name\" style=\"margin-bottom:0;\">")
+                .append(escapeHtml(name)).append("</h3>\n");
+            html.append("                <img src=\"data:image/png;base64,")
+                .append(photoBase64)
+                .append("\" alt=\"写真\" style=\"width:48px; height:48px; object-fit:cover; border-radius:50%; margin-left:12px; display:block;\">");
+        } else {
+            html.append("                <h3 class=\"card-name\" style=\"margin-bottom:0;\">")
+                .append(escapeHtml(name)).append("</h3>\n");
+        }
         if (!company.isEmpty()) {
             html.append("                <p class=\"card-company\">").append(escapeHtml(company)).append("</p>\n");
         }

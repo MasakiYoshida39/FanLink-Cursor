@@ -267,6 +267,179 @@
                 console.log('⚠️ QRGenライブラリが利用できません、フォールバックを使用します');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const photoInput = document.getElementById('photo');
+            const previewPhoto = document.getElementById('previewPhoto');
+            const nameInput = document.getElementById('name');
+            const previewName = document.getElementById('previewName');
+            const companyInput = document.getElementById('company');
+            const previewCompany = document.getElementById('previewCompany');
+            const positionInput = document.getElementById('position');
+            const previewPosition = document.getElementById('previewPosition');
+            const phoneInput = document.getElementById('phone');
+            const previewPhone = document.getElementById('previewPhone');
+            const emailInput = document.getElementById('email');
+            const previewEmail = document.getElementById('previewEmail');
+            const addressInput = document.getElementById('address');
+            const previewAddress = document.getElementById('previewAddress');
+            const websiteInput = document.getElementById('website');
+            const previewWebsite = document.getElementById('previewWebsite');
+            const sampleBtn = document.getElementById('sampleBtn');
+            const qrUrlInput = document.getElementById('qrUrl');
+            const previewQr = document.getElementById('previewQr');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const downloadBg1920Btn = document.getElementById('downloadBg1920Btn');
+            const downloadBg1254Btn = document.getElementById('downloadBg1254Btn');
+
+            if (photoInput && previewPhoto) {
+                photoInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            // 画像をリサイズしてから反映
+                            const img = new Image();
+                            img.onload = function() {
+                                const maxW = 300, maxH = 300;
+                                let w = img.width, h = img.height;
+                                if (w > maxW || h > maxH) {
+                                    const scale = Math.min(maxW / w, maxH / h);
+                                    w = Math.round(w * scale);
+                                    h = Math.round(h * scale);
+                                }
+                                const canvas = document.createElement('canvas');
+                                canvas.width = w;
+                                canvas.height = h;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, w, h);
+                                previewPhoto.src = canvas.toDataURL('image/jpeg', 0.85);
+                                previewPhoto.style.display = 'block';
+                            };
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewPhoto.src = '';
+                        previewPhoto.style.display = 'none';
+                    }
+                });
+            }
+
+            function updatePreview() {
+                if (nameInput && previewName) previewName.textContent = nameInput.value || '氏名';
+                if (companyInput && previewCompany) previewCompany.textContent = companyInput.value || '会社名';
+                if (positionInput && previewPosition) previewPosition.textContent = positionInput.value || '役職';
+                if (phoneInput && previewPhone) previewPhone.textContent = phoneInput.value ? `📞 ${phoneInput.value}` : '📞 電話番号';
+                if (emailInput && previewEmail) previewEmail.textContent = emailInput.value ? `📧 ${emailInput.value}` : '📧 メールアドレス';
+                if (websiteInput && previewWebsite) previewWebsite.textContent = websiteInput.value ? `🌐 ${websiteInput.value}` : '🌐 Webサイト';
+                if (addressInput && previewAddress) previewAddress.textContent = addressInput.value || '住所';
+            }
+
+            if (nameInput) nameInput.addEventListener('input', updatePreview);
+            if (companyInput) companyInput.addEventListener('input', updatePreview);
+            if (positionInput) positionInput.addEventListener('input', updatePreview);
+            if (phoneInput) phoneInput.addEventListener('input', updatePreview);
+            if (emailInput) emailInput.addEventListener('input', updatePreview);
+            if (websiteInput) websiteInput.addEventListener('input', updatePreview);
+            if (addressInput) addressInput.addEventListener('input', updatePreview);
+
+            // サンプルデータ生成
+            if (sampleBtn) {
+                sampleBtn.addEventListener('click', function() {
+                    if (nameInput) nameInput.value = '山田太郎';
+                    if (companyInput) companyInput.value = '株式会社サンプル';
+                    if (positionInput) positionInput.value = '営業部長';
+                    if (phoneInput) phoneInput.value = '03-1234-5678';
+                    if (emailInput) emailInput.value = 'yamada@sample.com';
+                    if (addressInput) addressInput.value = '〒100-0001 東京都千代田区千代田1-1-1';
+                    if (websiteInput) websiteInput.value = 'www.sample.com';
+                    updatePreview();
+                    // 画像は自動では入れない
+                });
+            }
+
+            // 初期化
+            updatePreview();
+
+            async function updateQrPreview() {
+                if (qrUrlInput && previewQr) {
+                    const url = qrUrlInput.value.trim();
+                    if (url) {
+                        try {
+                            const dataUrl = await window.generateQRGenQRCode(url, 60);
+                            previewQr.src = dataUrl;
+                            previewQr.style.display = 'block';
+                        } catch (e) {
+                            previewQr.src = '';
+                            previewQr.style.display = 'none';
+                        }
+                    } else {
+                        previewQr.src = '';
+                        previewQr.style.display = 'none';
+                    }
+                }
+            }
+
+            if (qrUrlInput) qrUrlInput.addEventListener('input', updateQrPreview);
+            updateQrPreview();
+
+            function downloadCardImage(width, height, filename) {
+                const card = document.querySelector('#cardPreview .business-card');
+                if (!card) return;
+                // 一時的に拡大用のラッパーを作成
+                const wrapper = document.createElement('div');
+                wrapper.style.width = width + 'px';
+                wrapper.style.height = height + 'px';
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+                wrapper.style.justifyContent = 'center';
+                wrapper.style.background = '#fff';
+                wrapper.appendChild(card.cloneNode(true));
+                document.body.appendChild(wrapper);
+                html2canvas(wrapper, {width, height, backgroundColor: '#fff', scale: 1}).then(canvas => {
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = filename;
+                    link.click();
+                    document.body.removeChild(wrapper);
+                });
+            }
+
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const cardHtml = document.getElementById('cardPreview').innerHTML;
+                    const blob = new Blob(
+                        [
+                            '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>名刺</title></head><body style="background:#f8f9fa;">',
+                            cardHtml,
+                            '</body></html>'
+                        ],
+                        { type: 'text/html' }
+                    );
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'business-card.html';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+            }
+
+            if (downloadBg1920Btn) {
+                downloadBg1920Btn.addEventListener('click', function() {
+                    downloadCardImage(1920, 1080, 'business-card-bg-1920x1080.png');
+                });
+            }
+            if (downloadBg1254Btn) {
+                downloadBg1254Btn.addEventListener('click', function() {
+                    downloadCardImage(1254, 758, 'business-card-1254x758.png');
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -281,6 +454,10 @@
                 <div class="form-section">
                     <h2>名刺情報入力</h2>
                     <form id="businessCardForm">
+                        <div class="form-group">
+                            <label for="photo">写真/ロゴ画像</label>
+                            <input type="file" id="photo" name="photo" accept="image/*">
+                        </div>
                         <div class="form-group">
                             <label for="name">氏名 *</label>
                             <input type="text" id="name" name="name" required>
@@ -344,7 +521,7 @@
                         </div>
                         
                         <div class="button-group">
-                            <button type="button" id="downloadBtn" class="primary">名刺HTMLダウンロード</button>
+                            <button type="submit" id="downloadBtn" class="primary">名刺HTMLダウンロード</button>
                             <button type="button" id="downloadBg1920Btn" class="secondary">Zoom背景用画像(1920×1080)ダウンロード</button>
                             <button type="button" id="downloadBg1254Btn" class="secondary">名刺ダウンロード(1254×758)ダウンロード</button>
                             <button type="button" id="sampleBtn" class="secondary">サンプルデータ</button>
@@ -357,27 +534,22 @@
                     <h2>プレビュー</h2>
                     <p class="preview-note">※ 入力内容はリアルタイムで反映されます</p>
                     <div id="cardPreview" class="card-preview">
-                        <div class="business-card classic blue">
-                            <div class="card-content">
-                                <div class="card-header">
-                                    <h3 class="card-name">山田太郎</h3>
-                                    <p class="card-company">株式会社サンプル</p>
-                                    <p class="card-position">営業部長</p>
-                                </div>
-                                <div class="card-contact">
-                                    <p>📞 03-1234-5678</p>
-                                    <p>📧 yamada@sample.com</p>
-                                    <p>🌐 www.sample.com</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="footer-left">
-                                        <p class="card-address">〒100-0001 東京都千代田区千代田1-1-1</p>
-                                    </div>
-                                    <div class="footer-right">
-                                        <!-- QRコードはここに挿入される -->
-                                    </div>
-                                </div>
+                        <div class="business-card">
+                            <div class="card-header" style="display:flex; align-items:center; gap:8px;">
+                                <h3 class="card-name" id="previewName">氏名</h3>
+                                <img id="previewPhoto" src="" alt="写真" style="display:none; width:48px; height:48px; object-fit:cover; border-radius:50%; margin-left:12px;">
                             </div>
+                            <div class="card-company" id="previewCompany">会社名</div>
+                            <div class="card-position" id="previewPosition">役職</div>
+                            <div class="card-contact" style="display:flex; align-items:flex-start; gap:12px;">
+                                <div style="flex:1;">
+                                    <div id="previewPhone">📞 電話番号</div>
+                                    <div id="previewEmail">📧 メールアドレス</div>
+                                    <div id="previewWebsite">🌐 Webサイト</div>
+                                </div>
+                                <img id="previewQr" src="" alt="QRコード" style="display:none; width:60px; height:60px; margin-top:0; flex-shrink:0;">
+                            </div>
+                            <div class="card-address" id="previewAddress">住所</div>
                         </div>
                     </div>
                 </div>
@@ -385,6 +557,6 @@
         </main>
     </div>
     
-    <script src="js/app.js?v=2.0"></script>
+    <!-- <script src="js/app.js?v=2.0"></script> -->
 </body>
 </html> 
