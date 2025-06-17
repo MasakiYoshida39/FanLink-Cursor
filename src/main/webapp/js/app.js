@@ -1,3 +1,4 @@
+console.log('app.js loaded');
 // 名刺作成アプリケーション
 class BusinessCardApp {
     constructor() {
@@ -31,6 +32,10 @@ class BusinessCardApp {
         this.qrUrlInput = document.getElementById('qrUrl');
         this.templateSelect = document.getElementById('template');
         this.colorSelect = document.getElementById('color');
+        this.photoInput = document.getElementById('photo');
+        this.logoInput = document.getElementById('logo');
+        this.photoDataUrl = '';
+        this.logoDataUrl = '';
         
         // 住所フィールドにデフォルト値を設定
         if (this.addressInput && !this.addressInput.value) {
@@ -50,6 +55,14 @@ class BusinessCardApp {
         this.clearBtn.addEventListener('click', () => this.clearForm());
         this.downloadBg1920Btn.addEventListener('click', () => this.downloadCardImage(1920, 1080));
         this.downloadBg1254Btn.addEventListener('click', () => this.downloadCardImage(1254, 758));
+        this.photoInput.addEventListener('change', (e) => {
+            console.log('photo input changed');
+            this.handleImageUpload(e, 'photo');
+        });
+        this.logoInput.addEventListener('change', (e) => {
+            console.log('logo input changed');
+            this.handleImageUpload(e, 'logo');
+        });
     }
 
     // QRGen QRコード生成システムの初期化
@@ -70,6 +83,15 @@ class BusinessCardApp {
         const cardData = this.getFormData();
         this.generateCardHTML(cardData).then(cardHTML => {
             this.previewContainer.innerHTML = cardHTML;
+            // 画像を直接DOMに反映
+            if (this.photoDataUrl) {
+                const photoEl = this.previewContainer.querySelector('.photo-img');
+                if (photoEl) photoEl.src = this.photoDataUrl;
+            }
+            if (this.logoDataUrl) {
+                const logoEl = this.previewContainer.querySelector('.logo-img');
+                if (logoEl) logoEl.src = this.logoDataUrl;
+            }
         });
     }
 
@@ -131,13 +153,25 @@ class BusinessCardApp {
             console.log('QRコード生成をスキップ: URLが空');
         }
         
+        // 顔写真とロゴのHTML（必ず<img>タグを出力する）
+        let photoHTML = `<img src="${this.photoDataUrl || ''}" alt="顔写真" class="photo-img" style="width:48px;height:48px;border-radius:50%;object-fit:cover;margin-right:10px;">`;
+        let logoHTML = `<img src="${this.logoDataUrl || ''}" alt="会社ロゴ" class="logo-img" style="width:48px;height:48px;border-radius:12px;object-fit:contain;margin-left:10px;background:#fff;">`;
+        console.log('photoHTML:', photoHTML);
+        console.log('logoHTML:', logoHTML);
+        console.log('this.photoDataUrl:', this.photoDataUrl);
+        console.log('this.logoDataUrl:', this.logoDataUrl);
+        
         return `
             <div class="business-card ${template} ${color}">
                 <div class="card-content">
                     <div class="card-header">
-                        <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
-                        <p class="card-company">${this.escapeHtml(data.company)}</p>
-                        <p class="card-position">${this.escapeHtml(data.position)}</p>
+                        ${photoHTML}
+                        ${logoHTML}
+                        <div>
+                            <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
+                            <p class="card-company">${this.escapeHtml(data.company)}</p>
+                            <p class="card-position">${this.escapeHtml(data.position)}</p>
+                        </div>
                     </div>
                     
                     <div class="card-contact">
@@ -532,9 +566,13 @@ class BusinessCardApp {
     <div class="business-card ${template} ${color}">
         <div class="card-content">
             <div class="card-header">
-                <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
-                <p class="card-company">${this.escapeHtml(data.company)}</p>
-                <p class="card-position">${this.escapeHtml(data.position)}</p>
+                ${photoHTML}
+                ${logoHTML}
+                <div>
+                    <h3 class="card-name">${this.escapeHtml(data.name)}</h3>
+                    <p class="card-company">${this.escapeHtml(data.company)}</p>
+                    <p class="card-position">${this.escapeHtml(data.position)}</p>
+                </div>
             </div>
             
             <div class="card-contact">
@@ -631,6 +669,31 @@ class BusinessCardApp {
         document.body.removeChild(wrapper);
         this.showNotification(`${width}x${height}画像をダウンロードしました`, 'success');
     }
+
+    handleImageUpload(e, type) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            if (type === 'photo') {
+                this.photoDataUrl = event.target.result;
+                console.log('顔写真DataURL:', this.photoDataUrl.slice(0, 100));
+                // 直接プレビューに反映
+                const preview = document.querySelector('.photo-img');
+                if (preview) preview.src = this.photoDataUrl;
+            } else if (type === 'logo') {
+                this.logoDataUrl = event.target.result;
+                console.log('ロゴDataURL:', this.logoDataUrl.slice(0, 100));
+                const preview = document.querySelector('.logo-img');
+                if (preview) preview.src = this.logoDataUrl;
+            }
+            this.updatePreview();
+        };
+        reader.onerror = (err) => {
+            console.error('画像読み込みエラー:', err);
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
 // アプリケーション初期化
@@ -662,4 +725,5 @@ document.addEventListener('keydown', (e) => {
                 break;
         }
     }
-}); 
+});
+ 

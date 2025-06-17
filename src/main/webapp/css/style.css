@@ -368,7 +368,39 @@ button.danger {
 }
 
 .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 0;
+}
+
+.photo-preview {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.photo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+}
+
+.logo-preview {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid #eee;
 }
 
 .card-name {
