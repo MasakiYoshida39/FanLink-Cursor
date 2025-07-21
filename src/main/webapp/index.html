@@ -409,23 +409,50 @@
             if (downloadBtn) {
                 downloadBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const cardHtml = document.getElementById('cardPreview').innerHTML;
-                    const blob = new Blob(
-                        [
-                            '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>名刺</title></head><body style="background:#f8f9fa;">',
-                            cardHtml,
-                            '</body></html>'
-                        ],
-                        { type: 'text/html' }
-                    );
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'business-card.html';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
+                    
+                    // フォームデータを取得
+                    const formData = new FormData();
+                    formData.append('name', document.getElementById('name').value || '山田太郎');
+                    formData.append('company', document.getElementById('company').value || '株式会社サンプル');
+                    formData.append('position', document.getElementById('position').value || '営業部長');
+                    formData.append('phone', document.getElementById('phone').value || '03-1234-5678');
+                    formData.append('email', document.getElementById('email').value || 'yamada@sample.com');
+                    formData.append('address', document.getElementById('address').value || '〒100-0001 東京都千代田区千代田1-1-1');
+                    formData.append('website', document.getElementById('website').value || 'www.sample.com');
+                    formData.append('template', document.getElementById('template').value);
+                    formData.append('color', document.getElementById('color').value);
+                    
+                    // 写真があれば追加
+                    const photoInput = document.getElementById('photo');
+                    if (photoInput && photoInput.files[0]) {
+                        formData.append('photo', photoInput.files[0]);
+                    }
+                    
+                    // サーバーAPIを呼び出し
+                    fetch('/api/generate-pdf', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `business-card-${document.getElementById('name').value || '名刺'}.html`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('ダウンロードに失敗しました: ' + error.message);
+                    });
                 });
             }
 
@@ -521,7 +548,6 @@
                         </div>
                         
                         <div class="button-group">
-                            <button type="submit" id="downloadBtn" class="primary">名刺HTMLダウンロード</button>
                             <button type="button" id="downloadBg1920Btn" class="secondary">Zoom背景用画像(1920×1080)ダウンロード</button>
                             <button type="button" id="downloadBg1254Btn" class="secondary">名刺ダウンロード(1254×758)ダウンロード</button>
                             <button type="button" id="sampleBtn" class="secondary">サンプルデータ</button>
