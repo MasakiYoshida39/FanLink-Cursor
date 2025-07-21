@@ -2,6 +2,7 @@ package com.businesscard.app;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Base64;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.ServletException;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.util.Base64;
 
 @jakarta.servlet.annotation.WebServlet("/api/generate-pdf")
 @MultipartConfig
@@ -116,7 +116,7 @@ public class BusinessCardServlet extends HttpServlet {
         html.append("        .business-card.purple { border-left: 5px solid #6f42c1; }\n");
         html.append("        .business-card.orange { border-left: 5px solid #fd7e14; }\n");
         html.append("        .card-content { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }\n");
-        html.append("        .card-header { position: relative; display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 56px; }\n");
+        html.append("        .card-header { position: relative; display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 128px; }\n");
         html.append("        .card-header-left { display: flex; flex-direction: column; }\n");
         html.append("        .card-name { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 5px; }\n");
         html.append("        .card-company { font-size: 1.1rem; color: #666; margin-bottom: 5px; }\n");
@@ -144,7 +144,7 @@ public class BusinessCardServlet extends HttpServlet {
         if (photoBase64 != null && !photoBase64.isEmpty()) {
             html.append("                <img src=\"data:image/png;base64,")
                 .append(photoBase64)
-                .append("\" alt=\"写真\" style=\"width:48px; height:48px; object-fit:cover; border-radius:50%; position:absolute; right:0; top:0; display:block;\">");
+                .append("\" alt=\"写真\" style=\"width:120px; height:120px; object-fit:cover; border-radius:50%; position:absolute; right:4px; top:4px; display:block;\">");
         }
         html.append("            </div>\n");
         html.append("            <div class=\"card-contact\">\n");
