@@ -116,6 +116,8 @@ public class BusinessCardServlet extends HttpServlet {
         html.append("        .business-card.purple { border-left: 5px solid #6f42c1; }\n");
         html.append("        .business-card.orange { border-left: 5px solid #fd7e14; }\n");
         html.append("        .card-content { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }\n");
+        html.append("        .card-header { position: relative; display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 56px; }\n");
+        html.append("        .card-header-left { display: flex; flex-direction: column; }\n");
         html.append("        .card-name { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 5px; }\n");
         html.append("        .card-company { font-size: 1.1rem; color: #666; margin-bottom: 5px; }\n");
         html.append("        .card-position { font-size: 1rem; color: #888; margin-bottom: 15px; }\n");
@@ -128,22 +130,21 @@ public class BusinessCardServlet extends HttpServlet {
         html.append("<body>\n");
         html.append("    <div class=\"business-card ").append(template).append(" ").append(color).append("\">\n");
         html.append("        <div class=\"card-content\">\n");
-        html.append("            <div class=\"card-header\" style=\"display:flex; align-items:center; gap:8px;\">\n");
-        if (photoBase64 != null && !photoBase64.isEmpty()) {
-            html.append("                <h3 class=\"card-name\" style=\"margin-bottom:0;\">")
-                .append(escapeHtml(name)).append("</h3>\n");
-            html.append("                <img src=\"data:image/png;base64,")
-                .append(photoBase64)
-                .append("\" alt=\"写真\" style=\"width:48px; height:48px; object-fit:cover; border-radius:50%; margin-left:12px; display:block;\">");
-        } else {
-            html.append("                <h3 class=\"card-name\" style=\"margin-bottom:0;\">")
-                .append(escapeHtml(name)).append("</h3>\n");
-        }
+        html.append("            <div class=\"card-header\">\n");
+        html.append("                <div class=\"card-header-left\">\n");
+        html.append("                    <h3 class=\"card-name\" style=\"margin-bottom:0;\">")
+            .append(escapeHtml(name)).append("</h3>\n");
         if (!company.isEmpty()) {
-            html.append("                <p class=\"card-company\">").append(escapeHtml(company)).append("</p>\n");
+            html.append("                    <p class=\"card-company\">").append(escapeHtml(company)).append("</p>\n");
         }
         if (!position.isEmpty()) {
-            html.append("                <p class=\"card-position\">").append(escapeHtml(position)).append("</p>\n");
+            html.append("                    <p class=\"card-position\">").append(escapeHtml(position)).append("</p>\n");
+        }
+        html.append("                </div>\n");
+        if (photoBase64 != null && !photoBase64.isEmpty()) {
+            html.append("                <img src=\"data:image/png;base64,")
+                .append(photoBase64)
+                .append("\" alt=\"写真\" style=\"width:48px; height:48px; object-fit:cover; border-radius:50%; position:absolute; right:0; top:0; display:block;\">");
         }
         html.append("            </div>\n");
         html.append("            <div class=\"card-contact\">\n");
